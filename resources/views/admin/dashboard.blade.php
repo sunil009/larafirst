@@ -9,7 +9,13 @@
 	<input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
 	<ul class="navbar-nav px-3">
 		<li class="nav-item text-nowrap">
-			<a class="nav-link" href="#">Sign out</a>
+			<a class="nav-link" href="{{ route('logout') }}"
+			onclick="event.preventDefault();
+			document.getElementById('logout-form').submit();">
+			Sign out</a>
+			<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+				@csrf
+			</form>
 		</li>
 	</ul>
 </nav>
@@ -31,8 +37,6 @@
 					</button>
 				</div>
 			</div>
-
-			<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
 			<h2>Section title</h2>
 			<div class="table-responsive">
