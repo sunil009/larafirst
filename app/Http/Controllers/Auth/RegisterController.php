@@ -7,9 +7,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Profile;
 
-class RegisterController extends Controller
-{
+class RegisterController extends Controller {
+
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -35,8 +36,8 @@ class RegisterController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
+
         $this->middleware('guest');
     }
 
@@ -46,8 +47,8 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
-    {
+    protected function validator(array $data) {
+
         return Validator::make($data, [
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -60,11 +61,17 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\User
      */
-    protected function create(array $data)
-    {
-        return User::create([
+    protected function create(array $data) {
+
+        $user = User::create([
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+        if($user) {
+            Profile::create([
+                'user_id' => $user->id
+            ]);
+        }
     }
 }

@@ -5,16 +5,18 @@ namespace App\Http\Controllers;
 use App\Category;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
-{
+class CategoryController extends Controller {
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
+    public function index() {
+        
+        $data['categories'] = Category::all();
+
+        return view('admin.categories.index', $data);
     }
 
     /**
@@ -22,8 +24,8 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
+
         //
     }
 
@@ -33,8 +35,8 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
+
         //
     }
 
@@ -44,8 +46,8 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
-    {
+    public function show(Category $category) {
+
         //
     }
 
@@ -55,8 +57,8 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
-    {
+    public function edit(Category $category) {
+
         //
     }
 
@@ -67,8 +69,8 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
-    {
+    public function update(Request $request, Category $category) {
+
         //
     }
 
@@ -78,8 +80,8 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
-    {
+    public function destroy(Category $category) {
+
         //
     }
 }

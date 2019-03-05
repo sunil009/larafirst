@@ -21,6 +21,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['as' => 'admin.'], function () {
 
-	Route::get('admin', 'AdminController@dashboard')->name('dashboar');
+	Route::get('admin', 'AdminController@dashboard')->name('dashboard');
+	Route::resource('product', 'ProductController');
+	Route::resource('category', 'CategoryController');
 
 });

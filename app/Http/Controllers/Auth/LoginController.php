@@ -46,7 +46,7 @@ class LoginController extends Controller
      * @return mixed
      */
     protected function authenticated(Request $request, $user) {
-        
+
         if($user->role->name == "admin") {
             $this->redirectTo = 'admin';
         }
