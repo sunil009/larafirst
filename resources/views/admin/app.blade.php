@@ -14,9 +14,13 @@
    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 
    <!-- Styles -->
-   <link href="public/css/app.css" rel="stylesheet">
+   <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
 
-   <link rel="stylesheet" href="public/css/admin.css">
+   <link rel="stylesheet" href="{{asset('public/css/admin.css') }}">
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" />
+
+   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 </head>
 <body>
@@ -25,22 +29,16 @@
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">Dashboard</h1>
-            <div class="btn-toolbar mb-2 mb-md-0">
-               <div class="btn-group mr-2">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-               </div>
-               <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                  <span data-feather="calendar"></span>
-                  This week
-               </button>
-            </div>
          </div>
          @include('admin.partials.navbar')
          @yield('content')
       </main>
    </div>
    
-   <script type="text/javascript" src="public/js/app.js"></script>
+   {{-- <script src="{{ mix('js/app.js') }}"></script> --}}
+   <script type="text/javascript" src="{{asset('public/js/app.js') }}"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+   @yield('scripts')
 </body>
 </html>
