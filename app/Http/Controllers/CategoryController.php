@@ -14,7 +14,9 @@ class CategoryController extends Controller {
      */
     public function index() {
         
-        $data['categories'] = Category::all();
+        // $data['categories'] = Category::all(); // get all recoard.
+        $data['categories'] = Category::paginate(3); // get pagination
+        // $data['categories'] = Category::simplePaginate(3); // sinple pagination
 
         return view('admin.categories.index', $data);
     }
@@ -71,7 +73,10 @@ class CategoryController extends Controller {
      */
     public function edit(Category $category) {
 
-        //
+        $data['categories'] = Category::all();
+        $data['category'] = $category;
+        
+        return view('admin.categories.create', $data);
     }
 
     /**
@@ -83,7 +88,22 @@ class CategoryController extends Controller {
      */
     public function update(Request $request, Category $category) {
 
-        //
+        $category->title = $request->title;
+        $category->description = $request->description;
+        $category->slug = $request->slug;
+        // detach all parent category
+        $category->childrens()->detach();
+        // attach selected parent category
+        $category->childrens()->attach($request->parent_id);
+        // save current record into DB
+        $saved = $category->save();
+        // dd($saved);
+        
+        if($saved) {
+            return back()->with('message', 'Record Successfully Updated..!');
+        }
+
+        return back()->with('message', 'Record Faild Updated..!');
     }
 
     /**
@@ -94,6 +114,10 @@ class CategoryController extends Controller {
      */
     public function destroy(Category $category) {
 
-        //
+        if($category->delete()) {
+            return back()->with('message', 'Record Successfully Delete!');
+        } else {
+            return back()->with('message', 'Error Delete Record!');
+        }
     }
 }

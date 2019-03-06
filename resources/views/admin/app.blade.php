@@ -27,10 +27,35 @@
    <div id="app">
 
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Dashboard</h1>
+         @yield('body_title')
+         <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+               <ol class="breadcrumb">
+                  @yield('breadcrumbs')
+               </ol>
+            </nav>
          </div>
          @include('admin.partials.navbar')
+
+         <div class="row">            
+            <div class="col-sm-12">
+               @if ($errors->any())
+               <div class="alert alert-danger">
+                <ul style="margin-bottom: 0">
+                  @foreach ($errors->all() as $error)
+                  <li>{{ $error }}</li>
+                  @endforeach
+               </ul>
+            </div>
+            @endif
+
+            @if(session()->has('message'))
+            <div class="alert alert-success">
+               {{ session('message') }}
+            </div>
+            @endif
+         </div>
+      </div>
          @yield('content')
       </main>
    </div>

@@ -1,61 +1,67 @@
 @extends('admin.app')
+
+@section('body_title')
+	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+		<h1 class="h2">Add Category</h1>
+	</div>
+@endsection
+
+@section('breadcrumbs')
+    <li class="breadcrumb-item">
+    	<a href="{{ route('admin.dashboard') }}">Dashboard</a>
+    </li>
+    <li class="breadcrumb-item">
+    	<a href="{{ route('admin.category.index') }}">Categories</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Add Category</li>
+@endsection
+
 @section('content')
 
-<form action="{{ route('admin.category.store') }}" method="post" accept-charset="utf-8">
-	@csrf
-	<div class="form-group row">
-		<div class="col-sm-12">
-			@if ($errors->any())
-			    <div class="alert alert-danger">
-			        <ul style="margin-bottom: 0">
-			            @foreach ($errors->all() as $error)
-			                <li>{{ $error }}</li>
-			            @endforeach
-			        </ul>
-			    </div>
-			@endif
+	<form action="@if(isset($category)) {{ route('admin.category.update', $category->id) }} @else {{ route('admin.category.store') }} @endif" method="post" accept-charset="utf-8">
+		@csrf
+		@if(isset($category))
+			@method('PUT')
+		@endif
+		<div class="form-group row">
+			<div class="col-sm-12">			
+				<label class="form-control-label">Title : </label>
+				<input type="text" id="txturl" name="title" class="form-control" value="@if(isset($category)) {{ $category->title }} @endif">
+				<p class="small">{{ url('/') }}/<span id="url">@if(isset($category)) {{ $category->slug }} @endif</span></p>
+				<input type="hidden" name="slug" id="slug" value="@if(isset($category)) {{ $category->slug }} @endif">
+			</div>
+		</div>
 
-			@if(session()->has('message'))
-				<div class="alert alert-success">
-					{{ session('message') }}
-				</div>
-			@endif
+		<div class="form-group row">
+			<div class="col-sm-12">			
+				<label class="form-control-label">Description : </label>
+				<textarea name="description" id="editor" class="form-control" cols="80" rows="10">@if(isset($category)) {!! $category->description !!} @endif</textarea>
+			</div>
 		</div>
-		<div class="col-sm-12">			
-			<label class="form-control-label">Title : </label>
-			<input type="text" id="txturl" name="title" class="form-control">
-			<p class="small">{{ url('/') }}/<span id="url"></span></p>
-			<input type="hidden" name="slug" id="slug" value="">
-		</div>
-	</div>
 
-	<div class="form-group row">
-		<div class="col-sm-12">			
-			<label class="form-control-label">Description : </label>
-			<textarea name="description" id="editor" class="form-control" cols="80" rows="10"></textarea>
+		<div class="form-group row">
+			<div class="col-sm-12">			
+				<label class="form-control-label">Select Category : </label>
+				<select name="parent_id[]" id="parent_id" class="form-control" multiple>
+					@php
+						$ids = (isset($category->childrens) && $category->childrens->count() > 0) ? array_pluck($category->childrens, 'id') : null;
+					@endphp
+					@if(isset($categories))
+						<option value="0">Top Level</option>
+						@foreach($categories as $category)
+							<option value="{{ $category->id }}" @if(!is_null($ids) && in_array($category->id, $ids)) {{ 'selected' }} @endif >{{ $category->title }}</option>
+						@endforeach
+					@endif
+				</select>
+			</div>
 		</div>
-	</div>
 
-	<div class="form-group row">
-		<div class="col-sm-12">			
-			<label class="form-control-label">Select Category : </label>
-			<select name="parent_id[]" id="parent_id" class="form-control" multiple>
-				@if($categories)
-					<option value="0">Top Level</option>
-					@foreach($categories as $category)
-						<option value="{{ $category->id }}">{{ $category->title }}</option>
-					@endforeach
-				@endif
-			</select>
+		<div class="form-group row">
+			<div class="col-sm-12">			
+				<input type="submit" name="submit" class="btn-btn-primary" value="Add Category">
+			</div>
 		</div>
-	</div>
-
-	<div class="form-group row">
-		<div class="col-sm-12">			
-			<input type="submit" name="submit" class="btn-btn-primary" value="Add Category">
-		</div>
-	</div>
-</form>
+	</form>
 
 @endsection
 
