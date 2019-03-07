@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use Illuminate\Http\Request;
+use App\Category;
 
 class ProductController extends Controller {
 
@@ -14,7 +15,7 @@ class ProductController extends Controller {
      */
     public function index() {
         
-        $data['products'] = Product::all();
+        $data['products'] = Product::paginate(3);
         
         return view('admin.products.index', $data);
     }
@@ -26,7 +27,8 @@ class ProductController extends Controller {
      */
     public function create() {
         
-        //
+        $data['categories'] = Category::with('childrens')->get();
+        return view('admin.products.create', $data);
     }
 
     /**

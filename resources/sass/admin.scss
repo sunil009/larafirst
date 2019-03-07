@@ -109,3 +109,19 @@ body {
   height : 300px;
   overflow-y : scroll;
 }
+
+.dropdown-active, .dropdown-item:hover {
+  
+  color : #fff;
+  background : #222;
+}
+
+Select:-moz-focusring { 
+  Color: Transparent;
+  Text-shadow: 0 0 0 #000;
+  Outline: None; 
+}
+
+a:focus {
+  outline: none;
+}

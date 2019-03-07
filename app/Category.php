@@ -2,12 +2,15 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use App\Product;
 
 class Category extends Model {
     
-    protected $guarded = [];	
+    protected $guarded = [];
+
+    use SoftDeletes;	
 
     protected $data = ['deleted_at'];
 

@@ -20,7 +20,7 @@
 
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" />
 
-   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 
 </head>
 <body>
@@ -50,7 +50,7 @@
             @endif
 
             @if(session()->has('message'))
-            <div class="alert alert-success">
+            <div class="alert alert-success close">
                {{ session('message') }}
             </div>
             @endif
@@ -62,8 +62,19 @@
    
    {{-- <script src="{{ mix('js/app.js') }}"></script> --}}
    <script type="text/javascript" src="{{asset('public/js/app.js') }}"></script>
+   <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+   
    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
+   <script type="text/javascript">
+      function confirmDelete(id) {
+         var choice = confirm("Are you sure, You want to Delete this record?");
+         if(choice) {
+            // alert("delete-" + id);
+            $("#delete-" + id).submit();
+         }
+      }
+   </script>
    @yield('scripts')
 </body>
 </html>

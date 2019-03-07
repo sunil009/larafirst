@@ -37161,15 +37161,6 @@ window.ClassicEditor = __webpack_require__(/*! @ckeditor/ckeditor5-build-classic
 
 window.select2 = __webpack_require__(/*! select2 */ "./node_modules/select2/dist/js/select2.js");
 
-window.slugify = function (text) {
-  return text.toString().toLowerCase()
-  .replace(/\s+/g, '-') // Replace spaces with -
-  .replace(/[^\w\-]+/g, '') // Remove all non-word chars
-  .replace(/\-\-+/g, '') // Replace muliple - with single -
-  .replace(/^-+/, '') // Trim - from start of text
-  .replace(/-+$/, ''); // Trim - from end of text
-};
-
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -37239,15 +37230,27 @@ if (token) {
 
 /***/ }),
 
+/***/ "./resources/sass/user.scss":
+/*!**********************************!*\
+  !*** ./resources/sass/user.scss ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ 0:
-/*!*****************************************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/sass/app.scss ./resources/sass/admin.scss ***!
-  \*****************************************************************************************/
+/*!********************************************************************************************************************!*\
+  !*** multi ./resources/js/app.js ./resources/sass/app.scss ./resources/sass/user.scss ./resources/sass/admin.scss ***!
+  \********************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! /home/kcs/htdocs/larafirst/resources/js/app.js */"./resources/js/app.js");
 __webpack_require__(/*! /home/kcs/htdocs/larafirst/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/kcs/htdocs/larafirst/resources/sass/user.scss */"./resources/sass/user.scss");
 module.exports = __webpack_require__(/*! /home/kcs/htdocs/larafirst/resources/sass/admin.scss */"./resources/sass/admin.scss");
 
 

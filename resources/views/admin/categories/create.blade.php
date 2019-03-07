@@ -2,7 +2,7 @@
 
 @section('body_title')
 	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-		<h1 class="h2">Add Category</h1>
+		<h1 class="h2">Add / Edit Category</h1>
 	</div>
 @endsection
 
@@ -26,16 +26,16 @@
 		<div class="form-group row">
 			<div class="col-sm-12">			
 				<label class="form-control-label">Title : </label>
-				<input type="text" id="txturl" name="title" class="form-control" value="@if(isset($category)) {{ $category->title }} @endif">
-				<p class="small">{{ url('/') }}/<span id="url">@if(isset($category)) {{ $category->slug }} @endif</span></p>
-				<input type="hidden" name="slug" id="slug" value="@if(isset($category)) {{ $category->slug }} @endif">
+				<input type="text" id="txturl" name="title" class="form-control" value="{{ @$category->title }}">
+				<p class="small">{{ url('/') }}/<span id="url">{{ @$category->slug }}</span></p>
+				<input type="hidden" name="slug" id="slug" value="{{ @$category->slug }}">
 			</div>
 		</div>
 
 		<div class="form-group row">
 			<div class="col-sm-12">			
 				<label class="form-control-label">Description : </label>
-				<textarea name="description" id="editor" class="form-control" cols="80" rows="10">@if(isset($category)) {!! $category->description !!} @endif</textarea>
+				<textarea name="description" id="editor" class="form-control" cols="80" rows="10">{!! @$category->description !!}</textarea>
 			</div>
 		</div>
 

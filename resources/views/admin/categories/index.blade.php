@@ -12,10 +12,16 @@
 @endsection
 
 @section('breadcrumbs')
-    <li class="breadcrumb-item">
-    	<a href="{{ route('admin.dashboard') }}">Dashboard</a>
-    </li>
-    <li class="breadcrumb-item active" aria-current="page">Categories</li>
+	<li class="breadcrumb-item">
+		<a href="{{ route('admin.dashboard') }}">Dashboard</a>
+	</li>
+	<li class="breadcrumb-item active" aria-current="page">
+		@if(request()->url() == route('admin.category.trash'))
+			Trashed Categories
+		@else
+			Categories
+		@endif		
+	</li>
 @endsection
 
 @section('content')
@@ -28,12 +34,16 @@
 					<th>Description</th>
 					<th>Slug</th>
 					<th>Categories</th>
-					<th>Date Created</th>
+					@if(request()->url() == route('admin.category.trash'))
+							<th>Date Deleted</th>
+					@else
+						<th>Date Created</th>
+					@endif
 					<th>Action</th>
 				</tr>
 			</thead>
 			<tbody>
-				@if ($categories)
+				@if (isset($categories))
 					@foreach ($categories as $key => $category)
 						<tr>
 							<td>{{ ++$key }}</td>
@@ -49,15 +59,31 @@
 									<strong>{{ "Parent Category" }}</strong>
 								@endif
 							</td>
-							<td>{{ $category->created_at }}</td>
-							<td>
-								<a href="{{ route('admin.category.edit', $category->id) }}" class="btn btn-info btn-sm">Edit</a> | 
-								<a href="javascript:;" class="btn btn-danger btn-sm" onclick="confirmDelete('{{ $category->id }}')">Delete</a>
-								<form action="{{ route('admin.category.destroy', $category->id) }}" id="delete-category-{{ $category->id }}" method="POST" style="display: none;">
-									@csrf
-									@method('DELETE')
-								</form>
-							</td>
+
+							@if($category->trashed())
+								<td>{{ $category->deleted_at }}</td>
+								<td>
+									<a class="btn btn-info btn-sm" href="{{route('admin.category.recover',$category->id)}}">Restore</a> | 
+									<a class="btn btn-danger btn-sm" href="javascript:;" onclick="confirmDelete('{{$category->id}}')">Delete</a>
+
+									<form id="delete-category-{{$category->id}}" action="{{ route('admin.category.destroy', $category->slug) }}" method="POST" style="display: none;">
+
+										@method('DELETE')
+										@csrf
+									</form>
+								</td>
+							@else
+								<td>{{ $category->created_at }}</td>
+								<td>
+									<a href="{{ route('admin.category.edit', $category->id) }}" class="btn btn-info btn-sm">Edit</a> | 
+									<a id="trash-category-{{$category->id}}" class="btn btn-warning btn-sm" href="{{route('admin.category.remove',$category->id)}}">Trash</a> |
+									<a href="javascript:;" class="btn btn-danger btn-sm" onclick="confirmDelete('category-{{ $category->id }}')">Delete</a>
+									<form action="{{ route('admin.category.destroy', $category->id) }}" id="delete-category-{{ $category->id }}" method="POST" style="display: none;">
+										@csrf
+										@method('DELETE')
+									</form>
+								</td>
+							@endif
 						</tr>
 					@endforeach
 				@else 
@@ -73,16 +99,4 @@
 			</div>
 		</div>
 	</div>
-@endsection
-
-@section('scripts')
-	<script type="text/javascript">
-		function confirmDelete(id) {
-			var choice = confirm("Are you sure, You want to Delete this record?");
-			if(choice) {
-				// alert("delete-category-" + id);
-				$("#delete-category-" + id).submit();
-			}
-		}
-	</script>
 @endsection

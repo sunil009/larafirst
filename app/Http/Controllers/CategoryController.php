@@ -21,6 +21,13 @@ class CategoryController extends Controller {
         return view('admin.categories.index', $data);
     }
 
+    public function trash() {
+        
+        $data['categories'] = Category::onlyTrashed()->paginate(3); // get pagination
+        // dd($data);
+        return view('admin.categories.index', $data);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -106,6 +113,16 @@ class CategoryController extends Controller {
         return back()->with('message', 'Record Faild Updated..!');
     }
 
+    public function recoverCat($id) {
+        // $category = Category::withTrashed()->findOrFail($id); // Normal and trash record
+        $category = Category::onlyTrashed()->findOrFail($id); // Only tresh record
+        
+        if($category->restore())
+            return back()->with('message', 'Category Successfully Restored!');
+        else
+            return back()->with('message', 'Error Restored Category!');
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -114,10 +131,26 @@ class CategoryController extends Controller {
      */
     public function destroy(Category $category) {
 
-        if($category->delete()) {
+        if($category->childrens()->detach() && $category->forceDelete()) {
             return back()->with('message', 'Record Successfully Delete!');
         } else {
             return back()->with('message', 'Error Delete Record!');
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Category  $category
+     * @return \Illuminate\Http\Response
+     */
+    public function remove(Category $category) {
+
+        // dd($category);
+        if($category->delete()) {
+            return back()->with('message', 'Record Successfully Trashed!');
+        } else {
+            return back()->with('message', 'Error Trashed Record!');
         }
     }
 }
