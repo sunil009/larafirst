@@ -36,7 +36,7 @@
 			</thead>
 			<tbody>
 				@if($products->count() > 0)
-					@foreach($products as $product)
+					@foreach($products as $key => $product)
 						<tr>
 							<td>{{ ++$key }}</td>
 							<td>{{$product->title}}</td>
@@ -53,7 +53,7 @@
 							</td>
 							<td>${{$product->price}}</td>
 							<td>
-								<img src="{{asset('storage/'.$product->thumbnail)}}" alt="{{$product->title}}" class="img-responsive" height="50"/>
+								<img src="{{asset('public/images/'.$product->thumbnail)}}" alt="{{$product->title}}" class="img-responsive" height="50"/>
 							</td>
 							@if($product->trashed())
 								<td>{{$product->deleted_at}}</td>

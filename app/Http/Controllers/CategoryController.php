@@ -48,8 +48,6 @@ class CategoryController extends Controller {
      */
     public function store(Request $request) {
 
-        // dd($request->all());
-
         $request->validate([
             'title' => 'required | min:5',
             'slug'  => 'required | min:5 | unique:categories',
@@ -80,7 +78,7 @@ class CategoryController extends Controller {
      */
     public function edit(Category $category) {
 
-        $data['categories'] = Category::all();
+        $data['categories'] = Category::where('id', '!=', $category->id)->get();
         $data['category'] = $category;
         
         return view('admin.categories.create', $data);
@@ -94,6 +92,11 @@ class CategoryController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Category $category) {
+
+        $request->validate([
+            'title' => 'required | min:5',
+            'slug'  => 'required | min:5 | unique:categories',
+        ]);
 
         $category->title = $request->title;
         $category->description = $request->description;

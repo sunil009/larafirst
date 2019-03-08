@@ -25,6 +25,10 @@ Route::group(['as' => 'admin.', 'middleware' => ['auth', 'admin'], 'prefix' => '
 	Route::get('category/trash', 'CategoryController@trash')->name('category.trash');
 	Route::get('category/recover/{id}', 'CategoryController@recoverCat')->name('category.recover');
 
+	Route::get('product/{product}/remove', 'ProductController@remove')->name('product.remove');
+	Route::get('product/trash', 'ProductController@trash')->name('product.trash');
+	Route::get('product/recover/{id}', 'ProductController@recoverCat')->name('product.recover');
+
 	Route::view('product/extras', 'admin.partials.extras')->name('product.extras');
 
 	Route::resource('product', 'ProductController');

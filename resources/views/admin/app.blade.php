@@ -50,7 +50,7 @@
             @endif
 
             @if(session()->has('message'))
-            <div class="alert alert-success close">
+            <div class="alert alert-success">
                {{ session('message') }}
             </div>
             @endif
@@ -65,6 +65,17 @@
    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
    
    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+   
+   <script>      
+      $(document).ready(function() { 
+         // show the alert 
+         setTimeout(function() {
+            $(".alert").fadeTo(1000, 0).slideUp(1000, function(){
+               // $(this).remove(); 
+            });
+         }, 3000);
+      });
+   </script>
 
    <script type="text/javascript">
       function confirmDelete(id) {

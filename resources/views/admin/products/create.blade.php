@@ -28,7 +28,7 @@
 					<div class="col-lg-12">
 						<label class="form-control-label">Title: </label>
 						<input type="text" id="txturl" name="title" class="form-control " value="{{@$product->title}}" />
-						<p class="small">{{config('app.url')}}<span id="url">{{ @$product->slug }}</span>
+						<p class="small">{{config('app.url')}}/<span id="url">{{ @$product->slug }}</span>
 							<input type="hidden" name="slug" id="slug" value="{{ @$product->slug }}">
 						</p>
 					</div>
