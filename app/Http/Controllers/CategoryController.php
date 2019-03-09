@@ -110,7 +110,7 @@ class CategoryController extends Controller {
         // dd($saved);
         
         if($saved) {
-            return back()->with('message', 'Record Successfully Updated..!');
+            return index()->with('message', 'Record Successfully Updated..!');
         }
 
         return back()->with('message', 'Record Faild Updated..!');

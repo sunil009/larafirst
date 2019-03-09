@@ -39,9 +39,9 @@
 					@foreach($products as $key => $product)
 						<tr>
 							<td>{{ ++$key }}</td>
-							<td>{{$product->title}}</td>
+							<td>{{ $product->title }}</td>
 							<td>{!! $product->description !!}</td>
-							<td>{{$product->slug}}</td>
+							<td>{{ $product->slug }}</td>
 							<td>
 								@if($product->categories()->count() > 0)
 									@foreach($product->categories as $children)
@@ -53,14 +53,14 @@
 							</td>
 							<td>${{$product->price}}</td>
 							<td>
-								<img src="{{asset('public/images/'.$product->thumbnail)}}" alt="{{$product->title}}" class="img-responsive" height="50"/>
+								<img src="{{ asset('storage/app/'.$product->thumbnail) }}" alt="{{ $product->title }}" class="img-responsive" height="50"/>
 							</td>
 							@if($product->trashed())
-								<td>{{$product->deleted_at}}</td>
+								<td>{{ $product->deleted_at }}</td>
 								<td>
-									<a class="btn btn-info btn-sm" href="{{route('admin.product.recover',$product->id)}}">Restore</a> | 
-									<a class="btn btn-danger btn-sm" href="javascript:;" onclick="confirmDelete('{{$product->id}}')">Delete</a>
-									<form id="delete-product-{{$product->id}}" action="{{ route('admin.product.destroy', $product->slug) }}" method="POST" style="display: none;">
+									<a class="btn btn-info btn-sm" href="{{route('admin.product.recover',$product->id) }}">Restore</a> | 
+									<a class="btn btn-danger btn-sm" href="javascript:;" onclick="confirmDelete('{{ $product->id }}')">Delete</a>
+									<form id="delete-product-{{ $product->id }}" action="{{ route('admin.product.destroy', $product->slug) }}" method="POST" style="display: none;">
 
 										@method('DELETE')
 										@csrf
@@ -69,10 +69,10 @@
 							@else
 							<td>{{$product->created_at}}</td>
 							<td>
-								<a class="btn btn-info btn-sm" href="{{route('admin.product.edit',$product->slug)}}">Edit</a> | 
-								<a id="trash-product-{{$product->id}}" class="btn btn-warning btn-sm" href="{{route('admin.product.remove',$product->slug)}}">Trash</a> | 
-								<a class="btn btn-danger btn-sm" href="javascript:;" onclick="confirmDelete('product-{{$product->id}}')">Delete</a>
-								<form id="delete-product-{{$product->id}}" action="{{ route('admin.product.destroy', $product->slug) }}" method="POST" style="display: none;">
+								<a class="btn btn-info btn-sm" href="{{ route('admin.product.edit',$product->slug) }}">Edit</a> | 
+								<a id="trash-product-{{ $product->id }}" class="btn btn-warning btn-sm" href="{{ route('admin.product.remove',$product->slug) }}">Trash</a> | 
+								<a class="btn btn-danger btn-sm" href="javascript:;" onclick="confirmDelete('product-{{ $product->id }}')">Delete</a>
+								<form id="delete-product-{{ $product->id }}" action="{{ route('admin.product.destroy', $product->slug) }}" method="POST" style="display: none;">
 
 									@method('DELETE')
 									@csrf

@@ -18,7 +18,7 @@
 
 @section('content')
 
-	<form action="@if(isset($category)) {{ route('admin.category.update', $category->id) }} @else {{ route('admin.category.store') }} @endif" method="post" accept-charset="utf-8">
+	<form action="@if(isset($category)) {{ route('admin.category.update', $category->slug) }} @else {{ route('admin.category.store') }} @endif" method="post" accept-charset="utf-8">
 		@csrf
 		@if(isset($category))
 			@method('PUT')
@@ -78,14 +78,22 @@
 			    } )
 			    .catch( err => {
 			        console.error( err.stack );
-			    } );
-			
-			$('#txturl').on('keyup', function(){
-				var url = slugify($(this).val());
-				// alert("Url : -" + $(this).val() + " | Slug " + url);
-				$('#url').html(url);
-				$('#slug').val(url);
-			});
+			    } );			
+
+
+			@php
+				if(!isset($category)) {
+			@endphp
+
+				$('#txturl').on('keyup', function(){
+					const pretty_url = slugify($(this).val());
+					$('#url').html(slugify(pretty_url));
+					$('#slug').val(pretty_url);
+				})
+
+			@php
+				}
+			@endphp
 
 			$('#parent_id').select2({
 				placeholder : "Select a Parent Category",

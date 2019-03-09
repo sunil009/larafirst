@@ -75,10 +75,10 @@
 							@else
 								<td>{{ $category->created_at }}</td>
 								<td>
-									<a href="{{ route('admin.category.edit', $category->id) }}" class="btn btn-info btn-sm">Edit</a> | 
+									<a href="{{ route('admin.category.edit', $category->slug) }}" class="btn btn-info btn-sm">Edit</a> | 
 									<a id="trash-category-{{$category->id}}" class="btn btn-warning btn-sm" href="{{route('admin.category.remove',$category->id)}}">Trash</a> |
 									<a href="javascript:;" class="btn btn-danger btn-sm" onclick="confirmDelete('category-{{ $category->id }}')">Delete</a>
-									<form action="{{ route('admin.category.destroy', $category->id) }}" id="delete-category-{{ $category->id }}" method="POST" style="display: none;">
+									<form action="{{ route('admin.category.destroy', $category->slug) }}" id="delete-category-{{ $category->id }}" method="POST" style="display: none;">
 										@csrf
 										@method('DELETE')
 									</form>

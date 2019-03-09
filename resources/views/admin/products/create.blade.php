@@ -123,12 +123,12 @@
 					<li class="list-group-item">
 						<div class="input-group mb-3">
 							<div class="custom-file ">
-								<input type="file"  class="custom-file-input" name="thumbnail" id="thumbnail">
+								<input type="file"  class="custom-file-input" name="thumbnail" id="thumbnail" value="{{ @$product->thumbnail }}">
 								<label class="custom-file-label" for="thumbnail">Choose file</label>
 							</div>
 						</div>
 						<div class="img-thumbnail  text-center">
-							<img src="@if(isset($product)) {{ asset('storage/'.$product->thumbnail) }} @else {{ asset('public/images/no-thumbnail.jpeg') }} @endif" id="imgthumbnail" class="img-fluid" alt="">
+							<img src="@if(isset($product)) {{ asset('storage/app/'.$product->thumbnail) }} @else {{ asset('public/images/no-thumbnail.jpeg') }} @endif" id="imgthumbnail" class="img-fluid" alt="">
 						</div>
 					</li>
 
@@ -184,12 +184,20 @@
 			console.error( error );
 		} );
 
-		$('#txturl').on('keyup', function(){
-			const pretty_url = slugify($(this).val());
-			$('#url').html(slugify(pretty_url));
-			$('#slug').val(pretty_url);
-		})
+      @php
+         if(!isset($product)) {
+      @endphp
+
+   		$('#txturl').on('keyup', function(){
+   			const pretty_url = slugify($(this).val());
+   			$('#url').html(slugify(pretty_url));
+   			$('#slug').val(pretty_url);
+   		})
 		
+      @php
+         }
+      @endphp
+
 		$('#select2').select2({
 			placeholder: "Select multiple Categories",
 			allowClear: true

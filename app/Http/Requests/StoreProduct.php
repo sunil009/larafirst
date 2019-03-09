@@ -27,10 +27,9 @@ class StoreProduct extends FormRequest {
 
       return [
          'title'       => 'required',
-         'slug'        => 'required',
+         'slug'        => 'required | unique:products,slug,'.$this->slug.',slug',
          'description' => 'required',
          'price'       => 'required | numeric',
-         'thumbnail'   => 'required | mimes:jpeg,jpg,bmp,png | max:2048',
          'status'      => 'required | numeric',
          'category_id' => 'required',
       ];

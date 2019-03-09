@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Product;
-// use App\Http\Requests\StoreProduct;
 use App\Http\Requests\StoreProduct;
 use Illuminate\Http\Request;
 use App\Category;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller {
 
@@ -19,6 +19,13 @@ class ProductController extends Controller {
         
         $data['products'] = Product::paginate(3);
         
+        return view('admin.products.index', $data);
+    }
+
+    public function trash() {
+        
+        $data['products'] = Product::onlyTrashed()->paginate(3); // get pagination
+        // dd($data);
         return view('admin.products.index', $data);
     }
 
@@ -41,14 +48,20 @@ class ProductController extends Controller {
      */
     public function store(StoreProduct $request) {
 
-        // dd($request->featured);
+        $request->validate([
+            'thumbnail'   => 'required | mimes:jpeg,jpg,bmp,png | max:2048',
+        ]);
+     
+        $path = 'public/images/no-thumbnail.jpeg';
+        
+        if($request->has('thumbnail')){
+            
+            $extension = ".".$request->thumbnail->getClientOriginalExtension();
+            $name = basename($request->thumbnail->getClientOriginalName(), $extension).time().$extension;
+            $name = strtolower(str_replace(" ", "-", $name));
 
-        $extension = ".".$request->thumbnail->getClientOriginalExtension();
-        $name = basename($request->thumbnail->getClientOriginalName(), $extension).time().$extension;
-        $name = strtolower(str_replace(" ", "-", $name));
-
-        $path = $request->thumbnail->move(public_path('images'), $name);
-        // dd($path);
+            $path = $request->thumbnail->storeAs('public/uploads/', $name);
+        }
 
         $product = Product::create([
             'title'       => $request->title,
@@ -57,7 +70,7 @@ class ProductController extends Controller {
             'price'       => $request->price,
             'discount_price' => isset($request->discount_price) ? $request->discount_price : 0,
             'discount'    => isset($request->discount) ? $request->discount : 0,
-            'thumbnail' => $name,
+            'thumbnail' => $path,
             'featured'  => isset($request->featured) ? $request->featured : 0,
             'status'    => $request->status,
         ]);
@@ -94,7 +107,10 @@ class ProductController extends Controller {
      */
     public function edit(Product $product) {
 
-        //
+        $categories = Category::all();
+
+        // $categories = Category::with('childrens')->get();
+        return view('admin.products.create',compact('product', 'categories'));
     }
 
     /**
@@ -104,9 +120,52 @@ class ProductController extends Controller {
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product) {
+    public function update(StoreProduct $request, Product $product) {
 
-        //
+        if($request->has('thumbnail')) {
+
+            $request->validate([
+                'thumbnail'   => 'required | mimes:jpeg,jpg,bmp,png | max:2048',
+            ]);         
+
+            $extension = ".".$request->thumbnail->getClientOriginalExtension();
+            $name = basename($request->thumbnail->getClientOriginalName(), $extension).time().$extension;
+            $name = strtolower(str_replace(" ", "-", $name));
+
+            $path = $request->thumbnail->storeAs('public/uploads', $name);
+            $product->thumbnail = $path;
+
+            Storage::delete($product->thumbnail);
+        }
+
+        $product->title = $request->title;
+        $product->slug = $request->slug;
+        $product->description = $request->description;
+        $product->status = $request->status;
+        $product->featured = isset($request->featured) ? $request->featured : 0;
+        $product->price = $request->price;
+        $product->discount = isset($request->discount) ? $request->discount : 0;
+        $product->discount_price = isset($request->discount_price) ? $request->discount_price : 0;
+        $product->categories()->detach();
+
+        if($product->save()) {
+
+            $product->categories()->attach($request->category_id);
+            return back()->with('message', 'Product Successfully Updated.');
+        } else {
+
+            return back()->with('message', 'Error Updateing Product!');
+        }
+    }
+
+    public function recoverProduct($id) {
+        // $product = Product::withTrashed()->findOrFail($id); // Normal and trash record
+        $product = Product::onlyTrashed()->findOrFail($id); // Only tresh record
+        
+        if($product->restore())
+            return back()->with('message', 'Product Successfully Restored!');
+        else
+            return back()->with('message', 'Error Restored Product!');
     }
 
     /**
@@ -117,7 +176,14 @@ class ProductController extends Controller {
      */
     public function destroy(Product $product) {
 
-        //
+        if($product->categories()->detach() && $product->forceDelete()){
+        
+            Storage::delete($product->thumbnail);
+            return back()->with('message','Product Successfully Deleted!');
+        } else {
+
+            return back()->with('message','Error Deleting Product');
+        }
     }
 
     /**
