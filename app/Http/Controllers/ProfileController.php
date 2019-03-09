@@ -4,17 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Profile;
 use Illuminate\Http\Request;
+use App\User;
 
-class ProfileController extends Controller
-{
+
+class ProfileController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
+    public function index() {
+
+        $data['users'] = User::with('role', 'profile')->paginate(3);
+        // dd($users);
+        return view('admin.users.index', $data);
     }
 
     /**
@@ -22,8 +25,8 @@ class ProfileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
+
         //
     }
 
@@ -33,8 +36,8 @@ class ProfileController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
+
         //
     }
 
@@ -44,8 +47,8 @@ class ProfileController extends Controller
      * @param  \App\Profile  $profile
      * @return \Illuminate\Http\Response
      */
-    public function show(Profile $profile)
-    {
+    public function show(Profile $profile) {
+
         //
     }
 
@@ -55,8 +58,8 @@ class ProfileController extends Controller
      * @param  \App\Profile  $profile
      * @return \Illuminate\Http\Response
      */
-    public function edit(Profile $profile)
-    {
+    public function edit(Profile $profile) {
+
         //
     }
 
@@ -67,8 +70,8 @@ class ProfileController extends Controller
      * @param  \App\Profile  $profile
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Profile $profile)
-    {
+    public function update(Request $request, Profile $profile) {
+
         //
     }
 
@@ -78,8 +81,22 @@ class ProfileController extends Controller
      * @param  \App\Profile  $profile
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Profile $profile)
-    {
+    public function destroy(Profile $profile) {
+
         //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Category  $category
+     * @return \Illuminate\Http\Response
+     */
+    public function remove(Profile $profile) {
+        if ($product->delete()) {
+            return back()->with('message', 'Product Successfully Trashed!');
+        } else {
+            return back()->with('message', 'Error Deleting Product');
+        }
     }
 }

@@ -4,7 +4,7 @@
 	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 		<h1 class="h2">Products List</h1>
 		<div class="btn-toolbar mb-2 mb-md-0">
-			<a href="{{route('admin.product.create')}}" class="btn btn-sm btn-outline-secondary">
+			<a href="{{ route('admin.product.create') }}" class="btn btn-sm btn-outline-secondary">
 				Add Product
 			</a>
 		</div>
@@ -13,7 +13,7 @@
 
 @section('breadcrumbs')
 	<li class="breadcrumb-item">
-		<a href="{{route('admin.dashboard')}}">Dashboard</a>
+		<a href="{{ route('admin.dashboard') }}">Dashboard</a>
 	</li>
 	<li class="breadcrumb-item active" aria-current="page">Products</li>
 @endsection
@@ -45,13 +45,13 @@
 							<td>
 								@if($product->categories()->count() > 0)
 									@foreach($product->categories as $children)
-										{{$children->title}},
+										{{ $children->title }},
 									@endforeach
 								@else
 									<strong>{{"product"}}</strong>
 								@endif
 							</td>
-							<td>${{$product->price}}</td>
+							<td>${{ $product->price }}</td>
 							<td>
 								<img src="{{ asset('storage/app/'.$product->thumbnail) }}" alt="{{ $product->title }}" class="img-responsive" height="50"/>
 							</td>

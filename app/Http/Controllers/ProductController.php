@@ -70,6 +70,7 @@ class ProductController extends Controller {
             'price'       => $request->price,
             'discount_price' => isset($request->discount_price) ? $request->discount_price : 0,
             'discount'    => isset($request->discount) ? $request->discount : 0,
+            'options' => isset($request->extras) ? json_encode($request->extras) : null,
             'thumbnail' => $path,
             'featured'  => isset($request->featured) ? $request->featured : 0,
             'status'    => $request->status,
@@ -146,6 +147,7 @@ class ProductController extends Controller {
         $product->price = $request->price;
         $product->discount = isset($request->discount) ? $request->discount : 0;
         $product->discount_price = isset($request->discount_price) ? $request->discount_price : 0;
+        // $product->options = isset($request->extras) ? json_encode($request->extras) : null;
         $product->categories()->detach();
 
         if($product->save()) {

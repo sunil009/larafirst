@@ -13,7 +13,7 @@ class Role extends Model {
     protected $guarded = [];	
     protected $dates = ['deleted_at'];
 
-    public function users() {
+    public function users(){
 
     	return $this->hasMany(User::class);
     }

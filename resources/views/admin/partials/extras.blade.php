@@ -1,19 +1,20 @@
 @if(request()->ajax())
 
 	<div class="row align-items-center options" style="padding-top: 10px;">
-		{{-- <div class="col-sm-12">
+		<div class="col-sm-12">
 			<h5 class="pt-2 pb-2 bg-primary text-center" style="color:#fff;">Extras</h5>
-		</div> --}}
+		</div>
 		
 		<div class="col-sm-4">
 			<label class="form-control-label">Option</label>
-			<input type="text" name="option[]" class="form-control" value="" placeholder="size">
+			<input type="text" name="extras[option][]" class="form-control" value="" placeholder="size">
 		</div>
+
 		<div class="col-sm-8">
 			<label class="form-control-label">Values</label>
-			<input type="text" name="values[]" class="form-control" placeholder="options1 | option2 | option3" />
+			<input type="text" name="extras[values][]" class="form-control" placeholder="options1 | option2 | option3" />
 			<label class="form-control-label">Additional Prices</label>
-			<input type="text" name="prices[]" class="form-control" placeholder="price1 | price2 | price3" />
+			<input type="text" name="extras[prices][]" class="form-control" placeholder="price1 | price2 | price3" />
 		</div>
 	</div>
 
