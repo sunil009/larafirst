@@ -47,9 +47,9 @@
                      <td>{{ @$user->email }}</td>
                      <td>{{ @$user->profile->slug }}</td>
                      <td>{{ $user->role->name }}</td>
-                     <td></td>
-                     {{-- <td>{{ @$user->profile->address }},{{ @$user->getCountry() }},{{ @$user->getState() }}, {{ @$user->getCity() }}</td> --}}
-                     <td><img src="{{ asset('storage/'.@$user->profile->thumbnail) }}" alt="{{ @$user->profile->name }}" class="img-responsive" height="50"/></td>
+                     {{-- <td></td> --}}
+                     <td>{{ @$user->profile->address }} ,{{ @$user->getCountry() }} ,{{ @$user->getState() }} , {{ @$user->getCity() }}</td>
+                     <td><img src="{{ asset('storage/app/'.@$user->profile->thumbnail) }}" alt="{{ @$user->profile->name }}" class="img-responsive" height="50"/></td>
 
                      @if($user->trashed())
                         <td>{{ @$user->deleted_at }}</td>

@@ -11,9 +11,9 @@
       <a href="{{route('admin.dashboard')}}">Dashboard</a>
    </li>
    <li class="breadcrumb-item ">
-      <a href="{{route('admin.profile.index')}}">users</a>
+      <a href="{{route('admin.profile.index')}}">Users</a>
    </li>
-   <li class="breadcrumb-item active" aria-current="page">Add/Edit users</li>
+   <li class="breadcrumb-item active" aria-current="page">Add / Edit Users</li>
 @endsection
 
 @section('content')
@@ -26,28 +26,10 @@
          @endif
          <div class="col-lg-9">
             <div class="form-group row">
-               <div class="col-sm-12">
-                  @if ($errors->any())
-                     <div class="alert alert-danger">
-                        <ul>
-                           @foreach ($errors->all() as $error)
-                              <li>{{ $error }}</li>
-                           @endforeach
-                        </ul>
-                     </div>
-                  @endif
-               </div>
-               <div class="col-sm-12">
-                  @if (session()->has('message'))
-                     <div class="alert alert-success">
-                        {{session('message')}}
-                     </div>
-                  @endif
-               </div>
                <div class="col-sm-12 col-md-6">
                   <label class="form-control-label">Name: </label>
                   <input type="text" id="txturl" name="name" class="form-control " value="{{ @$user->profile->name }}" />
-                  <p class="small">{{ route('admin.profile.index') }}/<span id="url">{{ $user->profile->slug }}</span>
+                  <p class="small">{{ route('admin.profile.index') }}/<span id="url">{{ @$user->profile->slug }}</span>
                      <input type="hidden" name="slug" id="slug" value="{{ @$user->profile->slug }}">
                   </p>
                </div>
@@ -66,7 +48,7 @@
                </div>
                <div class="col-sm-12 col-md-6">
                   <label class="form-control-label">Re-Type Password: </label>
-                  <input type="password" id="password_confirm" name="password_confirm" class="form-control " value="" />
+                  <input type="password" id="comfirm_password" name="comfirm_password" class="form-control " value="" />
 
                </div>
             </div>
@@ -93,7 +75,7 @@
                            <option value="{{$role->id}}"
                            @if(!is_null($ids) && in_array($role->id, $ids))
                               {{'selected'}}
-                           @endif>>{{$role->name}}</option>
+                           @endif>{{ ucwords($role->name) }}</option>
                         @endforeach
                      @endif
                   </select>
@@ -118,7 +100,7 @@
                   <label class="form-control-label">Country: </label>
                   <div class="input-group mb-3">
                      <select name="country_id" class="form-control" id="countries">
-                        <option value="0">Select a Country</option>
+                        <option value="0">Select Country</option>
                         @foreach($countries as $country)
                            <option value="{{ $country->id }}">{{ $country->name }}</option>
                         @endforeach
@@ -129,7 +111,7 @@
                   <label class="form-control-label">State: </label>
                   <div class="input-group mb-3">
                      <select name="state_id" class="form-control" id="states">
-                        <option value="0">Select a State</option>
+                        <option value="0">Select State</option>
                      </select>
                   </div>
                </div>
@@ -138,7 +120,8 @@
                   <label class="form-control-label">City: </label>
                   <div class="input-group mb-3">
                      <select name="city_id" class="form-control" id="cities">
-
+                        <option value="0">Select City</option>
+                        
                      </select>
                   </div>
                </div>
@@ -163,7 +146,7 @@
                      </div>
                   </div>
                   <div class="img-thumbnail  text-center">
-                     <img src="@if(isset($user)) {{ asset('storage/'.$user->thumbnail) }} @else {{ asset('images/no-thumbnail.jpeg') }} @endif" id="imgthumbnail" class="img-fluid" alt="">
+                     <img src="@if(isset($user)) {{ asset('storage/'.$user->thumbnail) }} @else {{ asset('public/images/no-thumbnail.jpeg') }} @endif" id="imgthumbnail" class="img-fluid" alt="">
                   </div>
                </li>
                <li class="list-group-item">
@@ -184,7 +167,7 @@
 @endsection
 
 @section('scripts')
-   {{-- <script type="text/javascript">
+   <script type="text/javascript">
 
    	$(function(){
    		$('#txturl').on('keyup', function(){
@@ -211,23 +194,23 @@
          //On Country Change
          $('#countries').on('change', function(){
             var id = $('#countries').select2('data')[0].id;
-            $('#states').val(null);
-            $('#states option').remove();
 
    	      // Fetch the preselected item, and add to the control
-            var studentSelect = $('#states');
+            var states = $('#states');
             $.ajax({
                type: 'GET',
                url: "{{ route('admin.profile.states') }}/" + id
             }).then(function (data) {
 
                // create the option and append to Select2
+               var option = new Option('Select State', 0, true, true);
+                  states.html(option);
                for(i = 0; i< data.length; i++){
                   var item = data[i]
-                  var option = new Option(item.name, item.id, true, true);
-                  studentSelect.append(option);
+                  var option = new Option(item.name, item.id, false, false);
+                  states.append(option);
                }
-               studentSelect.trigger('change');
+               states.trigger('change');
             });
          })
 
@@ -237,23 +220,23 @@
          	var id = $('#states').select2('data')[0].id;
 
          	// Fetch the preselected item, and add to the control
-         	var studentSelect = $('#cities');
-         	$('#cities').val(null);
-         	$('#cities option').remove();
+         	var cities = $('#cities');
             $.ajax({
                type: 'GET',
                url: "{{route('admin.profile.cities')}}/" + id
             }).then(function (data) {
 
             	// create the option and append to Select2
+               var option = new Option('Select City', 0, true, true);
+               cities.html(option);
             	for(i = 0; i < data.length; i++){
             		var item = data[i]
             		var option = new Option(item.name, item.id, false, false);
-            		studentSelect.append(option);
+            		cities.append(option);
             	}
             });
-            studentSelect.trigger('change');
+            // cities.trigger('change');
          })
       })
-   </script> --}}
+   </script>
 @endsection
