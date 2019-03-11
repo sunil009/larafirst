@@ -40,9 +40,9 @@
          </thead>
          <tbody>
             @if(isset($users) && $users->count() > 0)
-               @foreach($users as $user)
+               @foreach($users as $key=> $user)
                   <tr>
-                     <td>{{ @$user->id }}</td>
+                     <td>{{ ++$key }}</td>
                      <td>{{ @$user->profile->name }}</td>
                      <td>{{ @$user->email }}</td>
                      <td>{{ @$user->profile->slug }}</td>

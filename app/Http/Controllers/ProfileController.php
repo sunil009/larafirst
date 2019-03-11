@@ -137,7 +137,8 @@ class ProfileController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function remove(Profile $profile) {
-        if ($product->delete()) {
+        
+        if ($profile->delete()) {
             return back()->with('message', 'Product Successfully Trashed!');
         } else {
             return back()->with('message', 'Error Deleting Product');

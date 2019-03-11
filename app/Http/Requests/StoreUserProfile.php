@@ -23,10 +23,16 @@ class StoreUserProfile extends FormRequest {
      */
     public function rules() {
 
+        if($this->method() == 'PUT') {
+            $unique = ",slug,$this->slug,slug";
+        } else {
+            $unique = '';
+        }
+
         return [
             'name'     => 'required',
-            'slug'     => 'required',
-            'email'    => 'required | email | unique:users,email',
+            'slug'     => 'required | unique:products'.$unique,
+            'email'    => 'required | email| unique:users'.$unique,
             'password' => 'required',
             'comfirm_password' => 'required | same:password',
             'status'   => 'required',

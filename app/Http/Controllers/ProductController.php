@@ -7,6 +7,8 @@ use App\Http\Requests\StoreProduct;
 use Illuminate\Http\Request;
 use App\Category;
 use Illuminate\Support\Facades\Storage;
+use App\Cart;
+use Session;
 
 class ProductController extends Controller {
 
@@ -47,10 +49,6 @@ class ProductController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(StoreProduct $request) {
-
-        $request->validate([
-            'thumbnail'   => 'required | mimes:jpeg,jpg,bmp,png | max:2048',
-        ]);
      
         $path = 'public/images/no-thumbnail.jpeg';
         
@@ -97,7 +95,26 @@ class ProductController extends Controller {
      */
     public function show(Product $product) {
 
-        //
+        dd(Session::get('cart'));   
+        $data['products'] = Product::paginate(3);
+        $data['categories'] = Category::with('childrens')->get();
+
+        return view('products.all', $data);
+    }
+
+    public function single(Product $product) {
+
+        return view('products.single', compact('product'));
+    }
+
+    public function addToCart(Product $product, Request $request) {
+    
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        $qty = $request->qty ? $request->qty : 1;
+        $cart = new Cart($oldCart);
+        $cart->addProduct($product, $qty);
+        Session::put('cart', $cart);
+        return back()->with('message', "Product $product->title had been successfully added to Cart.");
     }
 
     /**
@@ -123,24 +140,21 @@ class ProductController extends Controller {
      */
     public function update(StoreProduct $request, Product $product) {
 
-        if($request->has('thumbnail')) {
-
-            $request->validate([
-                'thumbnail'   => 'required | mimes:jpeg,jpg,bmp,png | max:2048',
-            ]);         
+        if($request->has('thumbnail')) {    
 
             $extension = ".".$request->thumbnail->getClientOriginalExtension();
             $name = basename($request->thumbnail->getClientOriginalName(), $extension).time().$extension;
             $name = strtolower(str_replace(" ", "-", $name));
 
-            $path = $request->thumbnail->storeAs('public/uploads', $name);
-            $product->thumbnail = $path;
+            $path = $request->thumbnail->storeAs('public/uploads/', $name);
 
             Storage::delete($product->thumbnail);
+
+            $product->thumbnail = $path;
         }
 
         $product->title = $request->title;
-        $product->slug = $request->slug;
+        // $product->slug = $request->slug;
         $product->description = $request->description;
         $product->status = $request->status;
         $product->featured = isset($request->featured) ? $request->featured : 0;
