@@ -101,9 +101,20 @@
          </div>
       </div>
    </div>
-
+   
    <script type="text/javascript" src="{{ asset('public/js/app.js') }}"></script>
    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+   <script>      
+      $(document).ready(function() { 
+         // show the alert 
+         setTimeout(function() {
+            $(".alert-success").fadeTo(1000, 0).slideUp(1000, function(){
+               // $(this).remove(); 
+            });
+         }, 3000);
+      });
+   </script>
 </body>
 </html>
