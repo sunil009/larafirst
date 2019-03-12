@@ -12,8 +12,6 @@ use App\City;
 use App\Http\Requests\StoreUserProfile;
 use Illuminate\Support\Facades\Storage;
 
-
-
 class ProfileController extends Controller {
     /**
      * Display a listing of the resource.
@@ -22,8 +20,8 @@ class ProfileController extends Controller {
      */
     public function index() {
 
-        $data['users'] = User::with('role', 'profile')->paginate(3);
-        // dd($users);
+        $data['users'] = User::with('role', 'profile')->paginate(5);
+        // dd($data['users']->all());
         return view('admin.users.index', $data);
     }
 

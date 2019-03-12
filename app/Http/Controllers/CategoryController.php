@@ -56,7 +56,7 @@ class CategoryController extends Controller {
         $categories = Category::create($request->only(['title', 'description', 'slug']));
         $categories->childrens()->attach($request->parent_id);
 
-        return redirect()->route('admin.category.index')->with('message', 'Category Added Successfully!');
+        return redirect('admin.category.index')->with('message', 'Category Added Successfully!');
     }
 
     /**
@@ -110,7 +110,7 @@ class CategoryController extends Controller {
         // dd($saved);
         
         if($saved) {
-            return redirect()->route('admin.category.index')->with('message', 'Record Successfully Updated..!');
+            return redirect('admin.category.index')->with('message', 'Record Successfully Updated..!');
         }
 
         return back()->with('message', 'Record Faild Updated..!');

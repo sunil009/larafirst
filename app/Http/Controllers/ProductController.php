@@ -20,7 +20,7 @@ class ProductController extends Controller {
     public function index() {
         
         $data['products'] = Product::paginate(5);
-        
+        // dd($data['products']->all());
         return view('admin.products.index', $data);
     }
 
@@ -96,7 +96,7 @@ class ProductController extends Controller {
     public function show(Product $product) {
 
         // dd(Session::get('cart'));   
-        $data['products'] = Product::paginate(3);
+        $data['products'] = Product::paginate(6);
         $data['categories'] = Category::with('childrens')->get();
 
         return view('products.all', $data);
@@ -184,7 +184,7 @@ class ProductController extends Controller {
         }
 
         $product->title = $request->title;
-        // $product->slug = $request->slug;
+        $product->slug = $request->slug;
         $product->description = $request->description;
         $product->status = $request->status;
         $product->featured = isset($request->featured) ? $request->featured : 0;

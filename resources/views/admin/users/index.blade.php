@@ -63,9 +63,9 @@
                      @else
 
                         <td>{{ $user->created_at }}</td>
-                        <td><a class="btn btn-info btn-sm" href="{{ route('admin.profile.edit',$user->profile) }}">Edit</a> | <a id="trash-user-{{ $user->id }}" class="btn btn-warning btn-sm" href="{{ route('admin.profile.remove',$user->profile->slug) }}">Trash</a>
+                        <td><a class="btn btn-info btn-sm" href="{{ route('admin.profile.edit',$user->id) }}">Edit</a> | <a id="trash-user-{{ $user->id }}" class="btn btn-warning btn-sm" href="{{ route('admin.profile.remove',$user->id) }}">Trash</a>
                          | <a class="btn btn-danger btn-sm" href="javascript:;" onclick="confirmDelete('{{ $user->id }}')">Delete</a>
-                           <form id="delete-user-{{ $user->id }}" action="{{ route('admin.profile.destroy', $user->profile->slug) }}" method="POST" style="display: none;">
+                           <form id="delete-user-{{ $user->id }}" action="{{ route('admin.profile.destroy', $user->id) }}" method="POST" style="display: none;">
 
                               @method('DELETE')
                               @csrf
