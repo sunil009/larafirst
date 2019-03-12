@@ -10723,6 +10723,10 @@ footer p {
   margin: 0 auto;
 }
 
+.form-group {
+  margin-bottom: 1rem !important;
+}
+
 /* Fixed sidenav, full height */
 
 /* Style the sidenav links and the dropdown button */

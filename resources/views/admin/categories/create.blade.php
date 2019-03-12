@@ -78,22 +78,13 @@
 			    } )
 			    .catch( err => {
 			        console.error( err.stack );
-			    } );			
-
-
-			@php
-				if(!isset($category)) {
-			@endphp
+			    } );
 
 				$('#txturl').on('keyup', function(){
 					const pretty_url = slugify($(this).val());
 					$('#url').html(slugify(pretty_url));
 					$('#slug').val(pretty_url);
 				})
-
-			@php
-				}
-			@endphp
 
 			$('#parent_id').select2({
 				placeholder : "Select a Parent Category",

@@ -19,14 +19,14 @@ class ProductController extends Controller {
      */
     public function index() {
         
-        $data['products'] = Product::paginate(3);
+        $data['products'] = Product::paginate(5);
         
         return view('admin.products.index', $data);
     }
 
     public function trash() {
         
-        $data['products'] = Product::onlyTrashed()->paginate(3); // get pagination
+        $data['products'] = Product::onlyTrashed()->paginate(5); // get pagination
         // dd($data);
         return view('admin.products.index', $data);
     }
@@ -77,7 +77,7 @@ class ProductController extends Controller {
         if($product) {
 
             $product->categories()->attach($request->category_id);
-            return back()->with('message', 'Product Successfully Added.');
+            return redirect()->route('admin.product.index')->with('message', 'Product Successfully Added.');
             
         } else {
 
@@ -197,7 +197,7 @@ class ProductController extends Controller {
         if($product->save()) {
 
             $product->categories()->attach($request->category_id);
-            return back()->with('message', 'Product Successfully Updated.');
+            return redirect()->route('admin.product.index')->with('message', 'Product Successfully Updated.');
         } else {
 
             return back()->with('message', 'Error Updateing Product!');

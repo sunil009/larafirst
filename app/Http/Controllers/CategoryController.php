@@ -15,7 +15,7 @@ class CategoryController extends Controller {
     public function index() {
         
         // $data['categories'] = Category::all(); // get all recoard.
-        $data['categories'] = Category::paginate(3); // get pagination
+        $data['categories'] = Category::paginate(5); // get pagination
         // $data['categories'] = Category::simplePaginate(3); // sinple pagination
 
         return view('admin.categories.index', $data);
@@ -23,7 +23,7 @@ class CategoryController extends Controller {
 
     public function trash() {
         
-        $data['categories'] = Category::onlyTrashed()->paginate(3); // get pagination
+        $data['categories'] = Category::onlyTrashed()->paginate(5); // get pagination
         // dd($data);
         return view('admin.categories.index', $data);
     }
@@ -49,14 +49,14 @@ class CategoryController extends Controller {
     public function store(Request $request) {
 
         $request->validate([
-            'title' => 'required | min:5',
-            'slug'  => 'required | min:5 | unique:categories',
+            'title' => 'required | min:4',
+            'slug'  => 'required | min:4 | unique:categories',
         ]);
 
         $categories = Category::create($request->only(['title', 'description', 'slug']));
         $categories->childrens()->attach($request->parent_id);
 
-        return back()->with('message', 'Category Added Successfully!');
+        return redirect()->route('admin.category.index')->with('message', 'Category Added Successfully!');
     }
 
     /**
@@ -94,8 +94,8 @@ class CategoryController extends Controller {
     public function update(Request $request, Category $category) {
 
         $request->validate([
-            'title' => 'required | min:5',
-            'slug'  => 'required | min:5 | unique:categories',
+            'title' => 'required | min:4',
+            'slug'  => 'required | min:4 | unique:categories,slug,'.$request->slug.',slug',
         ]);
 
         $category->title = $request->title;
@@ -110,7 +110,7 @@ class CategoryController extends Controller {
         // dd($saved);
         
         if($saved) {
-            return index()->with('message', 'Record Successfully Updated..!');
+            return redirect()->route('admin.category.index')->with('message', 'Record Successfully Updated..!');
         }
 
         return back()->with('message', 'Record Faild Updated..!');

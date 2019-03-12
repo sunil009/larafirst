@@ -121,7 +121,7 @@
 					</li>
 
 					<li class="list-group-item">
-						<div class="col-12">
+						<div class="col-12" style="padding:0;">
 							<div class="input-group mb-3">
 								<div class="input-group-prepend">
 									<span class="input-group-text" ><input id="featured" type="checkbox" name="featured" value="@if(isset($product)){{ @$product->featured}} @else {{ 0 }} @endif" @if(isset($product) && $product->featured == 1) {{'checked'}} @endif /></span>
@@ -172,9 +172,6 @@
 			console.error( error );
 		} );
 
-      @php
-         if(!isset($product)) {
-      @endphp
 
    		$('#txturl').on('keyup', function(){
    			const pretty_url = slugify($(this).val());
@@ -182,9 +179,7 @@
    			$('#slug').val(pretty_url);
    		})
 		
-      @php
-         }
-      @endphp
+
 
 		$('#select2').select2({
 			placeholder: "Select multiple Categories",
