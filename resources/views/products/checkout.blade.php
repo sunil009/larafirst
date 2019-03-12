@@ -85,7 +85,7 @@
    					<label for="country">Country</label>
    					<select name="billing_country" class="custom-select d-block w-100" id="country" required="">
    						<option value="">Choose...</option>
-   						<option>United States</option>
+   						<option>India</option>
    					</select>
    					@if($errors->has('billing_country'))
       					<div class="alert alert-danger">
@@ -97,7 +97,7 @@
    					<label for="state">State</label>
    					<select name="billing_state" class="custom-select d-block w-100" id="state" required="">
    						<option value="">Choose...</option>
-   						<option>California</option>
+   						<option>Gujarat</option>
    					</select>
    					@if($errors->has('billing_state'))
       					<div class="alert alert-danger">
@@ -118,7 +118,7 @@
 
    			<hr class="mb-4">
    			<div class="custom-control custom-checkbox">
-   				<input name="shipping_address" value="true" type="checkbox" class="custom-control-input" id="same-address">
+   				<input name="shipping_address" autocomplete="false" type="checkbox" class="custom-control-input" id="same-address">
    				<label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
    			</div>
    			<div class="custom-control custom-checkbox">

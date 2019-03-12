@@ -8,8 +8,8 @@ use Session;
 use App\Http\Requests\StoreOrder;
 use DB;
 use App\Customer;
-// use Stripe\Charge;
-// use Stripe\Stripe;
+use Stripe\Charge;
+use Stripe\Stripe;
 
 class OrderController extends Controller {
 
@@ -45,66 +45,75 @@ class OrderController extends Controller {
      */
     public function store(StoreOrder $request) {
 
+        // dd($request->all());
+        $error = '';
+        $success = '';
         $cart = [];
-        $order ='';
-        $checkout='';
+        $order = '';
+        $checkout = '';
+        $charge = 0;
+
+        Stripe::setApiKey('sk_test_iiJdGevVXzMY1S1T5ZNzTUUh');
+
+        if(Session::has('cart')) {
+
+            $cart = Session::get('cart');
+            $charge = Charge::create([
+                'amount'        => $cart->getTotalPrice() * 100,
+                'currency'      => 'usd',
+                'source'        => $request->stripeToken,
+                'receipt_email' => $request->email,
+            ]);
+        }
+
+        // dd($charge);
 
         if(Session::has('cart')){
             $cart = Session::get('cart');
         }
 
-        if($request->shipping_address){
-           $customer = [
-               "billing_firstName" => $request->billing_firstName,
-               "billing_lastName" => $request->billing_lastName,
-               'username'=> $request->username,
-               "email"=> $request->email,
-               "billing_address1"=> $request->billing_address1,
-               "billing_address2" => $request->billing_address2,
-               "billing_country" => $request->billing_country,
-               "billing_state" => $request->billing_state,
-               "billing_zip" => $request->billing_zip,
-               "shipping_firstName" => $request->shipping_firstName,
-               "shipping_lastName" => $request->shippin_lastName,
-               "shipping_address1"=> $request->shipping_address1,
-               "shipping_address2" => $request->shipping_address2,
-               "shipping_country" => $request->shipping_country,
-               "shipping_state" => $request->shipping_state,
-               "shipping_zip" => $request->shipping_zip,
-           ];
+        $customer = [
+            "billing_firstName" => $request->billing_firstName,
+            "billing_lastName" => $request->billing_lastName,
+            'username'=> $charge->id,
+            "email"=> $request->email,
+            "billing_address1"=> $request->billing_address1,
+            "billing_address2" => $request->billing_address2,
+            "billing_country" => $request->billing_country,
+            "billing_state" => $request->billing_state,
+            "billing_zip" => $request->billing_zip
+        ];
 
-       } else {
-           $customer = [
-               "billing_firstName" => $request->billing_firstName,
-               "billing_lastName" => $request->billing_lastName,
-               "username"=> $request->username,
-               "email"=> $request->email,
-               "billing_address1"=> $request->billing_address1,
-               "billing_address2" => $request->billing_address2,
-               "billing_country" => $request->billing_country,
-               "billing_state" => $request->billing_state,
-               "billing_zip" => $request->billing_zip,
-           ];
-       }
+        if(!$request->shipping_address){
 
-       DB::beginTransaction();
-       $checkout = Customer::create($customer);
+            $customer["shipping_firstName"] = $request->shipping_firstName;
+            $customer["shipping_lastName"] = $request->shippin_lastName;
+            $customer["shipping_address1"]= $request->shipping_address1;
+            $customer["shipping_address2"] = $request->shipping_address2;
+            $customer["shipping_country"] = $request->shipping_country;
+            $customer["shipping_state"] = $request->shipping_state;
+            $customer["shipping_zip"] = $request->shipping_zip;
+        }
 
-       foreach($cart->getContents() as $slug => $product){
+        DB::beginTransaction();
+        $checkout = Customer::create($customer);
+
+        foreach($cart->getContents() as $slug => $product){
             $products = [
-                'user_id' => $checkout->id,
-                'product_id' =>$product['product']->id,
-                'qty'=>$product['qty'],
-                'status'=>'Pending',
-                'price'=>$product['price'],
-                'payment_id'=>0,
+                'user_id'    => $checkout->id,
+                'product_id' => $product['product']->id,
+                'qty'        => $product['qty'],
+                'status'     => 'Pending',
+                'price'      => $product['price'],
+                'payment_id' => 0,
             ];
             $order = Order::create($products);
         }
 
         if($checkout && $order){
             DB::commit();
-            return redirect()->route('products.all')->with('message', 'Order Place Successfully.');
+            $request->session()->forget('cart');
+            return redirect('products')->with('message', 'Your Order Successfully Processed.');
         } else {
             DB::rollback();
             return redirect('checkout')->with('message','Invalid Activity!');
